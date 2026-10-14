@@ -1,0 +1,6 @@
+# Your personal local settings. Loaded automatically if present. Gitignored: never commit this file.
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Bachelor_room_management
+    username: postgres
+    password: "CHANGE_ME"

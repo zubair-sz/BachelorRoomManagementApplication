@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    # Optional personal settings (database user/password). Gitignored; see application-local.example.yml.
+    import: optional:classpath:application-local.yml
+  application:
+    name: bachelor-room-management
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/brm_db}
+    username: ${DB_USERNAME:brm_user}
+    password: ${DB_PASSWORD:brm_password}
+    hikari:
+      # Fail in 5 seconds (instead of 30) when the database isn't reachable, so a missing
+      # PostgreSQL shows up immediately. See "Troubleshooting" in the README.
+      connection-timeout: 5000
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      # "update" is convenient for development. For production switch to "validate"
+      # and manage the schema with migrations (see schema-reference.sql).
+      ddl-auto: update
+    show-sql: false
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 25MB
+
+app:
+  # Time zone used for "today", recurring-chore generation and the midnight scheduler.
+  timezone: ${APP_TIMEZONE:Asia/Kolkata}
+  jwt:
+    # Base64-encoded secret, at least 256 bits. Override with an env var in real deployments.
+    secret: ${JWT_SECRET:c2VjcmV0LWtleS1mb3ItZGV2LWVudmlyb25tZW50LWNoYW5nZS1tZS1pbi1wcm9kdWN0aW9u}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000} # 24h
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:5173}
+  storage:
+    # Local folder for uploaded photos/videos. Swap FileStorageService for an S3/Firebase
+    # implementation later to keep binaries out of the server disk.
+    upload-dir: ${UPLOAD_DIR:./uploads}
